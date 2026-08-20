@@ -1,6 +1,6 @@
 Package: com.82flex.removewidgetbg
 Name: Remove Widget Background
-Version: 2.1
+Version: 2.1.1
 Architecture: iphoneos-arm
 Description: Remove the background of the widgets on the home screen.
 Maintainer: Lessica <82flex@gmail.com>
