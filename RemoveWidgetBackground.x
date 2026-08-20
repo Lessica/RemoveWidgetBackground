@@ -480,6 +480,9 @@ static void ReloadPrefs() {
 %end
 
 %ctor {
+    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    gIsWidgetRenderer = [bundleIdentifier hasPrefix:@"com.apple.chrono.WidgetRenderer-"];
+
     ReloadPrefs();
     if (!kIsEnabled) {
         return;
@@ -494,8 +497,6 @@ static void ReloadPrefs() {
         CFNotificationSuspensionBehaviorCoalesce
     );
 
-    NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
-    gIsWidgetRenderer = [bundleIdentifier hasPrefix:@"com.apple.chrono.WidgetRenderer-"];
     if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
         HBLogDebug(@"Initialized in SpringBoard");
         %init(RWBSpringBoard);
