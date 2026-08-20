@@ -12,8 +12,13 @@ static CGFloat kMaxWidgetWidth = 150;
 static CGFloat kMaxWidgetHeight = 150;
 static NSSet<NSString *> *kWidgetBundleIdentifiers = nil;
 
+static BOOL gIsWidgetRenderer = NO;
+
 static void ReloadPrefs() {
     static NSUserDefaults *prefs = nil;
+    if (gIsWidgetRenderer && !prefs) {
+        prefs = [[NSUserDefaults alloc] initWithSuiteName:@"/var/mobile/Library/Preferences/com.82flex.removewidgetbgprefs.plist"];
+    }
     if (!prefs) {
         prefs = [[NSUserDefaults alloc] initWithSuiteName:@"com.82flex.removewidgetbgprefs"];
     }
@@ -490,11 +495,12 @@ static void ReloadPrefs() {
     );
 
     NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    gIsWidgetRenderer = [bundleIdentifier hasPrefix:@"com.apple.chrono.WidgetRenderer-"];
     if ([bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
         HBLogDebug(@"Initialized in SpringBoard");
         %init(RWBSpringBoard);
     }
-    else if ([bundleIdentifier isEqualToString:@"com.apple.chronod"] || [bundleIdentifier hasPrefix:@"com.apple.chrono.WidgetRenderer-"]) {
+    else if ([bundleIdentifier isEqualToString:@"com.apple.chronod"] || gIsWidgetRenderer) {
         HBLogDebug(@"Initialized in chronod (or WidgetRenderer)");
         %init(RWB);
         if (@available(iOS 17, *)) {
